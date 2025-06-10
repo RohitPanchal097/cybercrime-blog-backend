@@ -13,18 +13,17 @@ const app = express();
 // CORS configuration
 const corsOptions = {
   origin: [
-    'http://localhost:5173', // Vite dev server
-    'https://cybercrime-blog-5igxno12j-rohit-kumars-projects-d4761f6d.vercel.app', // Vercel frontend
-    'https://cybercrime-blog-frontend.vercel.app' // Custom domain (if you add one)
+    'http://localhost:5173', // for local dev
+    'https://cybercrime-blog-new.vercel.app',
+    'https://cybercrime-blog-5igxno12j-rohit-kumars-projects-d4761f6d.vercel.app'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   credentials: false,
-  maxAge: 86400 // 24 hours
+  maxAge: 86400
 };
-
-// Middleware
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
