@@ -10,11 +10,27 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:5173', // Vite dev server
+    'https://cybercrime-blog-5igxno12j-rohit-kumars-projects-d4761f6d.vercel.app', // Vercel frontend
+    'https://cybercrime-blog-frontend.vercel.app' // Custom domain (if you add one)
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  credentials: false,
+  maxAge: 86400 // 24 hours
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
 // Log environment variables (without sensitive data)
 console.log('Environment check:');
