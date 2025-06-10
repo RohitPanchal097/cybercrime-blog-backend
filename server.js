@@ -10,18 +10,28 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-// CORS configuration
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://cybercrime-blog-new.vercel.app',
+  'https://cybercrime-blog-5igxno12j-rohit-kumars-projects-d4761f6d.vercel.app'
+];
+
 const corsOptions = {
-  origin: [
-    'http://localhost:5173', // for local dev
-    'https://cybercrime-blog-new.vercel.app',
-    'https://cybercrime-blog-5igxno12j-rohit-kumars-projects-d4761f6d.vercel.app'
-  ],
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   credentials: false,
   maxAge: 86400
 };
+
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json());
