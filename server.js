@@ -13,22 +13,27 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:5173',
   'https://cybercrime-blog-new.vercel.app',
-  'https://cybercrime-blog-5igxno12j-rohit-kumars-projects-d4761f6d.vercel.app'
+  'https://cybercrime-blog-5igxno12j-rohit-kumars-projects-d4761f6d.vercel.app',
+  'https://*.vercel.app',  // Allow all Vercel preview deployments
+  'https://cybercrime-blog-frontend.vercel.app'  // Add your main frontend domain
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl, etc.)
+    // Allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
+    
+    // Check if the origin is allowed or if it's a Vercel preview deployment
+    if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
       return callback(null, true);
     } else {
+      console.log('Blocked by CORS:', origin);
       return callback(new Error('Not allowed by CORS'));
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  credentials: false,
+  credentials: true,  // Enable credentials
   maxAge: 86400
 };
 
